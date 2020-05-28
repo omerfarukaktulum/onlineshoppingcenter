@@ -1,0 +1,50 @@
+server:
+  port: 9000
+zuul:
+  ignored-services: '*'
+  host:
+    time-to-live: -1
+    connect-timeout-millis: 5000
+    max-per-route-connections: 10000
+    max-total-connections: 5000
+    socket-timeout-millis: 60000
+  semaphore:
+    max-semaphores: 500
+  prefix: /api
+  routes:
+    user:
+      path: /user/**
+      serviceId: user-service
+      strip-prefix: false
+    product:
+      path: /product/**
+      serviceId: product-service
+      strip-prefix: false
+    category:
+      path: /category/**
+      serviceId: category-service
+      strip-prefix: false
+    order:
+      path: /order/**
+      serviceId: order-service
+      strip-prefix: false
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+    fetch-registry: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+
+ribbon:
+  ReadTimeout: 60000
+  connection-timeout: 3000
+  eureka:
+    enabled: true
